@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
@@ -324,6 +325,8 @@ public class AddCommandTest {
         @Override
         public boolean hasLesson(Lesson lesson) {
             throw new AssertionError("This method should not be called.");
+        }
+
         public void unarchivePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
