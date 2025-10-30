@@ -30,7 +30,6 @@ public class AddCommandParser implements Parser<AddCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(
                 args,
                 PREFIX_NAME, PREFIX_CLASS, PREFIX_SUBJECTS, PREFIX_EMERGENCY_CONTACT,
-                // NOTE: removed PREFIX_ATTENDANCE
                 PREFIX_PAYMENT_STATUS, PREFIX_ASSIGNMENT_STATUS, PREFIX_TAG
         );
 
@@ -58,8 +57,9 @@ public class AddCommandParser implements Parser<AddCommand> {
             throw new ParseException("At least one subject must be provided using " + PREFIX_SUBJECTS);
         }
 
-        String emergencyContact = argMultimap.getValue(PREFIX_EMERGENCY_CONTACT).orElseThrow(() ->
-                new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE)));
+        String emergencyContact = ParserUtil.parseEmergencyContact(
+                argMultimap.getValue(PREFIX_EMERGENCY_CONTACT).orElseThrow(() ->
+                        new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE))));
 
         // Optional status fields
         String paymentStatus = argMultimap.getValue(PREFIX_PAYMENT_STATUS).orElse("");
@@ -69,7 +69,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
         // NB: tagList is parsed to validate input; Student currently doesn’t store tags.
 
-        // Construct Student (AttendanceList is created internally by Student)
+        // Construct Student
         Student student = new Student(
                 name,
                 subjects.stream().map(Subject::new).toList(),
